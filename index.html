@@ -7,202 +7,209 @@
 <title>🎒 Tareas del Colegio</title>
 
 <style>
-    * {
-        box-sizing: border-box;
-    }
 
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: linear-gradient(135deg, #eef5ff, #fff7ed);
-        color: #263238;
-    }
+* {
+    box-sizing: border-box;
+}
 
-    .login {
-        min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 20px;
-    }
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(135deg, #eaf3ff, #fff7ed);
+    color: #263238;
+}
 
-    .login-box {
-        background: white;
-        width: 100%;
-        max-width: 420px;
-        padding: 35px;
-        border-radius: 22px;
-        box-shadow: 0 8px 30px rgba(0,0,0,0.12);
-        text-align: center;
-    }
+.login {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
 
-    .login-box h1 {
-        margin-top: 0;
-        font-size: 30px;
-    }
+.login-box {
+    background: white;
+    width: 100%;
+    max-width: 420px;
+    padding: 35px;
+    border-radius: 25px;
+    box-shadow: 0 10px 35px rgba(0,0,0,.15);
+    text-align: center;
+}
 
-    .login-box p {
-        color: #666;
-    }
+.login-box h1 {
+    font-size: 30px;
+    margin-bottom: 10px;
+}
 
-    input {
-        width: 100%;
-        padding: 14px;
-        border: 2px solid #ddd;
-        border-radius: 12px;
-        font-size: 18px;
-        margin: 10px 0;
-    }
+.login-box p {
+    color: #777;
+}
 
-    button {
-        border: none;
-        border-radius: 12px;
-        padding: 12px 18px;
-        font-size: 16px;
-        cursor: pointer;
-        background: #4f7cff;
-        color: white;
-        margin: 5px;
-    }
+.login-box input {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #ddd;
+    border-radius: 12px;
+    font-size: 18px;
+    margin: 15px 0;
+    text-align: center;
+}
 
-    button:hover {
-        opacity: 0.9;
-    }
+button {
+    border: 0;
+    border-radius: 12px;
+    padding: 12px 18px;
+    font-size: 16px;
+    cursor: pointer;
+    background: #4d7cff;
+    color: white;
+}
 
-    .hidden {
-        display: none;
-    }
+button:hover {
+    opacity: .88;
+}
 
-    .container {
-        max-width: 1000px;
-        margin: auto;
-        padding: 25px;
-    }
+.hidden {
+    display: none !important;
+}
 
-    header {
-        background: white;
-        border-radius: 20px;
-        padding: 25px;
-        text-align: center;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-        margin-bottom: 25px;
-    }
+.container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 25px;
+}
 
-    header h1 {
-        margin: 0 0 8px;
-        font-size: 32px;
-    }
+header {
+    background: white;
+    padding: 25px;
+    border-radius: 22px;
+    box-shadow: 0 6px 25px rgba(0,0,0,.08);
+    text-align: center;
+    margin-bottom: 25px;
+}
 
-    .modo {
-        color: #666;
-    }
+header h1 {
+    margin: 0;
+    font-size: 32px;
+}
+
+#modo {
+    margin-top: 10px;
+    color: #777;
+}
+
+.cerrar {
+    background: #777;
+    margin-top: 15px;
+}
+
+.editor {
+    background: white;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 6px 20px rgba(0,0,0,.08);
+    margin-bottom: 25px;
+}
+
+.editor h2 {
+    margin-top: 0;
+}
+
+.editor select,
+.editor input {
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    font-size: 16px;
+    margin: 5px;
+}
+
+.dias {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 15px;
+}
+
+.dia {
+    background: white;
+    border-radius: 20px;
+    padding: 18px;
+    min-height: 220px;
+    box-shadow: 0 6px 20px rgba(0,0,0,.08);
+}
+
+.dia h2 {
+    text-align: center;
+    margin-top: 0;
+    font-size: 21px;
+}
+
+.tarea {
+    background: #f3f6ff;
+    border-radius: 12px;
+    padding: 11px;
+    margin: 9px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tarea span {
+    flex: 1;
+}
+
+.tarea.completada span {
+    text-decoration: line-through;
+    opacity: .5;
+}
+
+.eliminar {
+    background: #ef5350;
+    padding: 6px 9px;
+    font-size: 12px;
+}
+
+.sin-tareas {
+    text-align: center;
+    color: #aaa;
+}
+
+@media(max-width:850px) {
 
     .dias {
-        display: grid;
-        grid-template-columns: repeat(5, 1fr);
-        gap: 15px;
+        grid-template-columns: 1fr;
     }
 
-    .dia {
-        background: white;
-        border-radius: 18px;
-        padding: 18px;
-        min-height: 220px;
-        box-shadow: 0 5px 18px rgba(0,0,0,0.08);
-    }
+}
 
-    .dia h2 {
-        margin-top: 0;
-        text-align: center;
-        font-size: 21px;
-    }
-
-    .tarea {
-        background: #f4f7ff;
-        padding: 10px;
-        border-radius: 10px;
-        margin: 8px 0;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .tarea.completada {
-        text-decoration: line-through;
-        opacity: 0.5;
-    }
-
-    .tarea span {
-        flex: 1;
-    }
-
-    .boton-eliminar {
-        background: #ef5350;
-        padding: 5px 8px;
-        font-size: 12px;
-    }
-
-    .editor {
-        background: white;
-        padding: 20px;
-        border-radius: 18px;
-        margin-bottom: 25px;
-        box-shadow: 0 5px 18px rgba(0,0,0,0.08);
-    }
-
-    .editor h2 {
-        margin-top: 0;
-    }
-
-    .editor select,
-    .editor input {
-        width: auto;
-        min-width: 180px;
-        padding: 12px;
-        border-radius: 10px;
-        border: 2px solid #ddd;
-        font-size: 16px;
-    }
-
-    .cerrar {
-        background: #777;
-    }
-
-    @media (max-width: 800px) {
-        .dias {
-            grid-template-columns: 1fr;
-        }
-
-        .dia {
-            min-height: auto;
-        }
-    }
 </style>
 </head>
 
 <body>
 
-<!-- PANTALLA DE ACCESO -->
+
+<!-- LOGIN -->
+
 <div id="login" class="login">
 
     <div class="login-box">
 
         <h1>🎒 Tareas del Colegio</h1>
 
-        <p>Introduce tu código para entrar</p>
+        <p>Introduce tu código</p>
 
         <input
-            type="password"
             id="codigo"
+            type="password"
             placeholder="Código"
-            maxlength="10"
         >
 
         <button onclick="entrar()">
             ENTRAR
         </button>
 
-        <p id="error" style="color:red;"></p>
+        <p id="error"></p>
 
     </div>
 
@@ -210,95 +217,143 @@
 
 
 <!-- WEB -->
+
 <div id="web" class="hidden">
 
-    <div class="container">
-
-        <header>
-
-            <h1>🎒 TAREAS DEL COLEGIO</h1>
-
-            <div id="modo" class="modo"></div>
-
-            <button class="cerrar" onclick="cerrarSesion()">
-                🔒 Cerrar sesión
-            </button>
-
-        </header>
+<div class="container">
 
 
-        <!-- ZONA DE EDICIÓN -->
-        <div id="editor" class="editor hidden">
+<header>
 
-            <h2>✏️ Modificar tareas</h2>
+    <h1>🎒 TAREAS DEL COLEGIO</h1>
 
-            <select id="dia">
-                <option value="lunes">Lunes</option>
-                <option value="martes">Martes</option>
-                <option value="miercoles">Miércoles</option>
-                <option value="jueves">Jueves</option>
-                <option value="viernes">Viernes</option>
-            </select>
+    <div id="modo"></div>
 
-            <input
-                type="text"
-                id="nuevaTarea"
-                placeholder="Escribe una tarea..."
-            >
+    <button class="cerrar" onclick="cerrarSesion()">
+        🔒 Cerrar sesión
+    </button>
 
-            <button onclick="agregarTarea()">
-                ➕ Añadir tarea
-            </button>
-
-        </div>
+</header>
 
 
-        <!-- TAREAS -->
-        <div class="dias">
+<!-- EDITOR -->
 
-            <div class="dia">
-                <h2>📘 Lunes</h2>
-                <div id="lunes"></div>
-            </div>
+<div id="editor" class="editor hidden">
 
-            <div class="dia">
-                <h2>📗 Martes</h2>
-                <div id="martes"></div>
-            </div>
+    <h2>✏️ Añadir tarea</h2>
 
-            <div class="dia">
-                <h2>📕 Miércoles</h2>
-                <div id="miercoles"></div>
-            </div>
+    <select id="diaSeleccionado">
 
-            <div class="dia">
-                <h2>📙 Jueves</h2>
-                <div id="jueves"></div>
-            </div>
+        <option value="lunes">Lunes</option>
+        <option value="martes">Martes</option>
+        <option value="miercoles">Miércoles</option>
+        <option value="jueves">Jueves</option>
+        <option value="viernes">Viernes</option>
 
-            <div class="dia">
-                <h2>📒 Viernes</h2>
-                <div id="viernes"></div>
-            </div>
+    </select>
 
-        </div>
+    <input
+        id="textoTarea"
+        type="text"
+        placeholder="Escribe la tarea"
+    >
+
+    <button onclick="anadirTarea()">
+        ➕ Añadir
+    </button>
+
+    <p>
+        ⚠️ Los cambios hechos aquí son solo para este navegador.
+        Para que los vea todo el mundo, cambia la sección
+        <b>TAREAS</b> del código y haz Commit en GitHub.
+    </p>
+
+</div>
+
+
+<!-- DÍAS -->
+
+<div class="dias">
+
+    <div class="dia">
+
+        <h2>📘 Lunes</h2>
+
+        <div id="lunes"></div>
 
     </div>
+
+
+    <div class="dia">
+
+        <h2>📗 Martes</h2>
+
+        <div id="martes"></div>
+
+    </div>
+
+
+    <div class="dia">
+
+        <h2>📕 Miércoles</h2>
+
+        <div id="miercoles"></div>
+
+    </div>
+
+
+    <div class="dia">
+
+        <h2>📙 Jueves</h2>
+
+        <div id="jueves"></div>
+
+    </div>
+
+
+    <div class="dia">
+
+        <h2>📒 Viernes</h2>
+
+        <div id="viernes"></div>
+
+    </div>
+
+</div>
+
+</div>
 
 </div>
 
 
 <script>
 
+
+/* =========================================================
+   🔐 CÓDIGOS
+   ========================================================= */
+
 const CODIGO_VER = "1234";
+
 const CODIGO_EDITAR = "9876";
 
-let modoEdicion = false;
 
+/* =========================================================
+   🎒 TAREAS
+   =========================================================
+   
+   ⭐ ESTA ES LA PARTE QUE PUEDES CAMBIAR EN GITHUB ⭐
 
-/* TAREAS INICIALES */
+   Ejemplo:
 
-let tareas = JSON.parse(localStorage.getItem("tareasColegio")) || {
+   lunes: [
+       "Excursión",
+       "Estudiar matemáticas"
+   ]
+
+   ========================================================= */
+
+let tareas = {
 
     lunes: [
         "Excursión"
@@ -308,24 +363,41 @@ let tareas = JSON.parse(localStorage.getItem("tareasColegio")) || {
         "Hacer proyecto de Sociales: Napoleón"
     ],
 
-    miercoles: [],
+    miercoles: [
 
-    jueves: [],
+    ],
 
-    viernes: []
+    jueves: [
+
+    ],
+
+    viernes: [
+
+    ]
 
 };
 
 
-/* ENTRAR */
+/* =========================================================
+   VARIABLES
+   ========================================================= */
+
+let modoEdicion = false;
+
+
+/* =========================================================
+   ENTRAR
+   ========================================================= */
 
 function entrar() {
 
-    const codigo = document.getElementById("codigo").value;
+    let codigo =
+        document.getElementById("codigo").value.trim();
 
     if (codigo === CODIGO_VER) {
 
         modoEdicion = false;
+
         mostrarWeb();
 
     }
@@ -333,6 +405,7 @@ function entrar() {
     else if (codigo === CODIGO_EDITAR) {
 
         modoEdicion = true;
+
         mostrarWeb();
 
     }
@@ -347,38 +420,56 @@ function entrar() {
 }
 
 
-/* MOSTRAR WEB */
+/* =========================================================
+   MOSTRAR WEB
+   ========================================================= */
 
 function mostrarWeb() {
 
-    document.getElementById("login").classList.add("hidden");
+    document
+        .getElementById("login")
+        .classList.add("hidden");
 
-    document.getElementById("web").classList.remove("hidden");
+    document
+        .getElementById("web")
+        .classList.remove("hidden");
+
 
     if (modoEdicion) {
 
-        document.getElementById("modo").textContent =
-            "✏️ Modo edición";
+        document
+            .getElementById("modo")
+            .textContent =
+            "✏️ Modo modificación";
 
-        document.getElementById("editor").classList.remove("hidden");
+        document
+            .getElementById("editor")
+            .classList.remove("hidden");
 
     }
 
     else {
 
-        document.getElementById("modo").textContent =
+        document
+            .getElementById("modo")
+            .textContent =
             "👀 Solo lectura";
 
-        document.getElementById("editor").classList.add("hidden");
+        document
+            .getElementById("editor")
+            .classList.add("hidden");
 
     }
+
 
     mostrarTareas();
 
 }
 
 
-/* MOSTRAR TAREAS */
+/* =========================================================
+   MOSTRAR TAREAS
+   ========================================================= */
 
 function mostrarTareas() {
 
@@ -390,45 +481,61 @@ function mostrarTareas() {
         "viernes"
     ];
 
-    dias.forEach(dia => {
 
-        const contenedor = document.getElementById(dia);
+    dias.forEach(function(dia) {
+
+        const contenedor =
+            document.getElementById(dia);
 
         contenedor.innerHTML = "";
+
 
         if (tareas[dia].length === 0) {
 
             contenedor.innerHTML =
-                "<p style='text-align:center;color:#aaa;'>Sin tareas</p>";
+                '<div class="sin-tareas">Sin tareas</div>';
+
+            return;
 
         }
 
-        tareas[dia].forEach((tarea, indice) => {
 
-            const div = document.createElement("div");
+        tareas[dia].forEach(function(tarea, indice) {
+
+            const div =
+                document.createElement("div");
 
             div.className = "tarea";
 
+
             div.innerHTML = `
+
                 <input
                     type="checkbox"
-                    onchange="completarTarea('${dia}', ${indice})"
+                    onchange="completar(this)"
                 >
 
-                <span>${escapeHTML(tarea)}</span>
+                <span>
+                    ${escapar(tarea)}
+                </span>
 
                 ${
                     modoEdicion
                     ?
-                    `<button
-                        class="boton-eliminar"
-                        onclick="eliminarTarea('${dia}', ${indice})">
+                    `
+                    <button
+                        class="eliminar"
+                        onclick="eliminarTarea('${dia}', ${indice})"
+                    >
                         🗑️
-                    </button>`
+                    </button>
+                    `
                     :
                     ""
                 }
+
             `;
+
 
             contenedor.appendChild(div);
 
@@ -439,16 +546,21 @@ function mostrarTareas() {
 }
 
 
-/* AÑADIR */
+/* =========================================================
+   AÑADIR TAREA
+   ========================================================= */
 
-function agregarTarea() {
+function anadirTarea() {
 
-    const dia = document.getElementById("dia").value;
+    let dia =
+        document.getElementById("diaSeleccionado").value;
 
-    const texto = document
-        .getElementById("nuevaTarea")
+    let texto =
+        document
+        .getElementById("textoTarea")
         .value
         .trim();
+
 
     if (texto === "") {
 
@@ -458,26 +570,31 @@ function agregarTarea() {
 
     }
 
+
     tareas[dia].push(texto);
 
-    guardar();
 
-    document.getElementById("nuevaTarea").value = "";
+    document
+        .getElementById("textoTarea")
+        .value = "";
+
 
     mostrarTareas();
 
 }
 
 
-/* ELIMINAR */
+/* =========================================================
+   ELIMINAR
+   ========================================================= */
 
 function eliminarTarea(dia, indice) {
 
-    if (confirm("¿Quieres eliminar esta tarea?")) {
+    if (
+        confirm("¿Quieres eliminar esta tarea?")
+    ) {
 
         tareas[dia].splice(indice, 1);
-
-        guardar();
 
         mostrarTareas();
 
@@ -486,49 +603,63 @@ function eliminarTarea(dia, indice) {
 }
 
 
-/* COMPLETAR */
+/* =========================================================
+   COMPLETAR
+   ========================================================= */
 
-function completarTarea(dia, indice) {
+function completar(casilla) {
 
-    guardar();
+    const tarea =
+        casilla.parentElement;
+
+    if (casilla.checked) {
+
+        tarea.classList.add("completada");
+
+    }
+
+    else {
+
+        tarea.classList.remove("completada");
+
+    }
 
 }
 
 
-/* GUARDAR */
-
-function guardar() {
-
-    localStorage.setItem(
-        "tareasColegio",
-        JSON.stringify(tareas)
-    );
-
-}
-
-
-/* CERRAR SESIÓN */
+/* =========================================================
+   CERRAR SESIÓN
+   ========================================================= */
 
 function cerrarSesion() {
 
-    document.getElementById("web").classList.add("hidden");
+    document
+        .getElementById("web")
+        .classList.add("hidden");
 
-    document.getElementById("login").classList.remove("hidden");
+    document
+        .getElementById("login")
+        .classList.remove("hidden");
 
-    document.getElementById("codigo").value = "";
+    document
+        .getElementById("codigo")
+        .value = "";
 
 }
 
 
-/* SEGURIDAD BÁSICA PARA TEXTO */
+/* =========================================================
+   SEGURIDAD DEL TEXTO
+   ========================================================= */
 
-function escapeHTML(text) {
+function escapar(texto) {
 
-    const div = document.createElement("div");
+    const elemento =
+        document.createElement("div");
 
-    div.textContent = text;
+    elemento.textContent = texto;
 
-    return div.innerHTML;
+    return elemento.innerHTML;
 
 }
 
