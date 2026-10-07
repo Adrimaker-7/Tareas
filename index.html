@@ -880,72 +880,9 @@ document
     .focus();
 
 
-</script>
-
-</body>
-</html>
-}
 
 
-/* =========================================================
-   COMPLETAR
-   ========================================================= */
 
-function completar(casilla) {
-
-    const tarea =
-        casilla.parentElement;
-
-    if (casilla.checked) {
-
-        tarea.classList.add("completada");
-
-    }
-
-    else {
-
-        tarea.classList.remove("completada");
-
-    }
-
-}
-
-
-/* =========================================================
-   CERRAR SESIÓN
-   ========================================================= */
-
-function cerrarSesion() {
-
-    document
-        .getElementById("web")
-        .classList.add("hidden");
-
-    document
-        .getElementById("login")
-        .classList.remove("hidden");
-
-    document
-        .getElementById("codigo")
-        .value = "";
-
-}
-
-
-/* =========================================================
-   SEGURIDAD DEL TEXTO
-   ========================================================= */
-
-function escapar(texto) {
-
-    const elemento =
-        document.createElement("div");
-
-    elemento.textContent = texto;
-
-    return elemento.innerHTML;
-
-}
 
 </script>
 
