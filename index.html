@@ -175,10 +175,36 @@ header h1 {
     color: #aaa;
 }
 
+.estado {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #777;
+}
+
 @media(max-width:850px) {
 
     .dias {
         grid-template-columns: 1fr;
+    }
+
+    .container {
+        padding: 15px;
+    }
+
+    header h1 {
+        font-size: 27px;
+    }
+
+    .editor select,
+    .editor input {
+        width: 100%;
+        margin: 5px 0;
+    }
+
+    .editor button {
+        width: 100%;
+        margin-top: 5px;
     }
 
 }
@@ -203,6 +229,7 @@ header h1 {
             id="codigo"
             type="password"
             placeholder="Código"
+            onkeydown="if(event.key === 'Enter') entrar()"
         >
 
         <button onclick="entrar()">
@@ -228,6 +255,8 @@ header h1 {
     <h1>🎒 TAREAS DEL COLEGIO</h1>
 
     <div id="modo"></div>
+
+    <div id="estado" class="estado"></div>
 
     <button class="cerrar" onclick="cerrarSesion()">
         🔒 Cerrar sesión
@@ -256,6 +285,7 @@ header h1 {
         id="textoTarea"
         type="text"
         placeholder="Escribe la tarea"
+        onkeydown="if(event.key === 'Enter') anadirTarea()"
     >
 
     <button onclick="anadirTarea()">
@@ -263,9 +293,8 @@ header h1 {
     </button>
 
     <p>
-        ⚠️ Los cambios hechos aquí son solo para este navegador.
-        Para que los vea todo el mundo, cambia la sección
-        <b>TAREAS</b> del código y haz Commit en GitHub.
+        💾 Los cambios se guardan automáticamente
+        y estarán disponibles desde cualquier dispositivo.
     </p>
 
 </div>
@@ -339,18 +368,14 @@ const CODIGO_EDITAR = "9876";
 
 
 /* =========================================================
-   🎒 TAREAS
-   =========================================================
-   
-   ⭐ ESTA ES LA PARTE QUE PUEDES CAMBIAR EN GITHUB ⭐
+   ☁️ DIRECCIÓN DE LA BASE DE DATOS
+   ========================================================= */
 
-   Ejemplo:
+const API_TAREAS = "/.netlify/functions/tareas";
 
-   lunes: [
-       "Excursión",
-       "Estudiar matemáticas"
-   ]
 
+/* =========================================================
+   🎒 TAREAS INICIALES
    ========================================================= */
 
 let tareas = {
@@ -363,17 +388,11 @@ let tareas = {
         "Hacer proyecto de Sociales: Napoleón"
     ],
 
-    miercoles: [
+    miercoles: [],
 
-    ],
+    jueves: [],
 
-    jueves: [
-
-    ],
-
-    viernes: [
-
-    ]
+    viernes: []
 
 };
 
@@ -386,19 +405,171 @@ let modoEdicion = false;
 
 
 /* =========================================================
-   ENTRAR
+   ☁️ CARGAR TAREAS DESDE NETLIFY
    ========================================================= */
 
-function entrar() {
+async function cargarTareas() {
+
+    try {
+
+        mostrarEstado("☁️ Cargando tareas...");
+
+        const respuesta =
+            await fetch(API_TAREAS);
+
+        if (!respuesta.ok) {
+            throw new Error("Error HTTP " + respuesta.status);
+        }
+
+        const datos =
+            await respuesta.json();
+
+        if (datos && typeof datos === "object") {
+
+            tareas = {
+
+                lunes: Array.isArray(datos.lunes)
+                    ? datos.lunes
+                    : [],
+
+                martes: Array.isArray(datos.martes)
+                    ? datos.martes
+                    : [],
+
+                miercoles: Array.isArray(datos.miercoles)
+                    ? datos.miercoles
+                    : [],
+
+                jueves: Array.isArray(datos.jueves)
+                    ? datos.jueves
+                    : [],
+
+                viernes: Array.isArray(datos.viernes)
+                    ? datos.viernes
+                    : []
+
+            };
+
+        }
+
+        mostrarTareas();
+
+        mostrarEstado("☁️ Tareas sincronizadas");
+
+        setTimeout(function() {
+            mostrarEstado("");
+        }, 2500);
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        mostrarEstado(
+            "⚠️ No se pudieron cargar las tareas"
+        );
+
+        mostrarTareas();
+
+    }
+
+}
+
+
+/* =========================================================
+   💾 GUARDAR TAREAS EN NETLIFY
+   ========================================================= */
+
+async function guardarTareas() {
+
+    try {
+
+        mostrarEstado("💾 Guardando...");
+
+        const respuesta =
+            await fetch(API_TAREAS, {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify(tareas)
+
+            });
+
+
+        if (!respuesta.ok) {
+            throw new Error(
+                "Error HTTP " + respuesta.status
+            );
+        }
+
+
+        const resultado =
+            await respuesta.json();
+
+
+        if (!resultado.ok) {
+            throw new Error(
+                resultado.error || "Error al guardar"
+            );
+        }
+
+
+        mostrarEstado("✅ Guardado correctamente");
+
+        setTimeout(function() {
+            mostrarEstado("");
+        }, 2500);
+
+
+        return true;
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        mostrarEstado(
+            "❌ Error al guardar las tareas"
+        );
+
+        alert(
+            "No se han podido guardar las tareas. " +
+            "Comprueba tu conexión a Internet."
+        );
+
+        return false;
+
+    }
+
+}
+
+
+/* =========================================================
+   🔐 ENTRAR
+   ========================================================= */
+
+async function entrar() {
 
     let codigo =
-        document.getElementById("codigo").value.trim();
+        document
+        .getElementById("codigo")
+        .value
+        .trim();
+
 
     if (codigo === CODIGO_VER) {
 
         modoEdicion = false;
 
         mostrarWeb();
+
+        await cargarTareas();
 
     }
 
@@ -408,11 +579,15 @@ function entrar() {
 
         mostrarWeb();
 
+        await cargarTareas();
+
     }
 
     else {
 
-        document.getElementById("error").textContent =
+        document
+            .getElementById("error")
+            .textContent =
             "❌ Código incorrecto";
 
     }
@@ -468,6 +643,19 @@ function mostrarWeb() {
 
 
 /* =========================================================
+   MOSTRAR ESTADO
+   ========================================================= */
+
+function mostrarEstado(texto) {
+
+    document
+        .getElementById("estado")
+        .textContent = texto;
+
+}
+
+
+/* =========================================================
    MOSTRAR TAREAS
    ========================================================= */
 
@@ -490,7 +678,10 @@ function mostrarTareas() {
         contenedor.innerHTML = "";
 
 
-        if (tareas[dia].length === 0) {
+        if (
+            !tareas[dia] ||
+            tareas[dia].length === 0
+        ) {
 
             contenedor.innerHTML =
                 '<div class="sin-tareas">Sin tareas</div>';
@@ -547,13 +738,16 @@ function mostrarTareas() {
 
 
 /* =========================================================
-   AÑADIR TAREA
+   ➕ AÑADIR TAREA
    ========================================================= */
 
-function anadirTarea() {
+async function anadirTarea() {
 
     let dia =
-        document.getElementById("diaSeleccionado").value;
+        document
+        .getElementById("diaSeleccionado")
+        .value;
+
 
     let texto =
         document
@@ -581,14 +775,17 @@ function anadirTarea() {
 
     mostrarTareas();
 
+
+    await guardarTareas();
+
 }
 
 
 /* =========================================================
-   ELIMINAR
+   🗑️ ELIMINAR TAREA
    ========================================================= */
 
-function eliminarTarea(dia, indice) {
+async function eliminarTarea(dia, indice) {
 
     if (
         confirm("¿Quieres eliminar esta tarea?")
@@ -598,8 +795,95 @@ function eliminarTarea(dia, indice) {
 
         mostrarTareas();
 
+        await guardarTareas();
+
     }
 
+}
+
+
+/* =========================================================
+   ☑️ COMPLETAR TAREA
+   ========================================================= */
+
+function completar(checkbox) {
+
+    const tarea =
+        checkbox.closest(".tarea");
+
+    if (checkbox.checked) {
+
+        tarea.classList.add("completada");
+
+    }
+
+    else {
+
+        tarea.classList.remove("completada");
+
+    }
+
+}
+
+
+/* =========================================================
+   🛡️ ESCAPAR TEXTO
+   ========================================================= */
+
+function escapar(texto) {
+
+    const div =
+        document.createElement("div");
+
+    div.textContent = texto;
+
+    return div.innerHTML;
+
+}
+
+
+/* =========================================================
+   🔒 CERRAR SESIÓN
+   ========================================================= */
+
+function cerrarSesion() {
+
+    modoEdicion = false;
+
+    document
+        .getElementById("web")
+        .classList.add("hidden");
+
+    document
+        .getElementById("login")
+        .classList.remove("hidden");
+
+    document
+        .getElementById("codigo")
+        .value = "";
+
+    document
+        .getElementById("error")
+        .textContent = "";
+
+    mostrarEstado("");
+
+}
+
+
+/* =========================================================
+   🚀 INICIO
+   ========================================================= */
+
+document
+    .getElementById("codigo")
+    .focus();
+
+
+</script>
+
+</body>
+</html>
 }
 
 
