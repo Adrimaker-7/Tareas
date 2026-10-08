@@ -127,7 +127,7 @@ header h1 {
 
 .dias {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(7, 1fr);
     gap: 15px;
 }
 
@@ -174,6 +174,41 @@ header h1 {
     text-align: center;
     color: #aaa;
 }
+
+.extra-card {
+    background: white;
+    border-radius: 20px;
+    padding: 18px;
+    min-height: 220px;
+    box-shadow: 0 6px 20px rgba(0,0,0,.08);
+}
+
+.extra-card h2 {
+    text-align: center;
+    margin-top: 0;
+    font-size: 21px;
+}
+
+.extra-item {
+    background: #f3f6ff;
+    border-radius: 12px;
+    padding: 11px;
+    margin: 9px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.extra-item span {
+    flex: 1;
+}
+
+.extra-item.completada span {
+    text-decoration: line-through;
+    opacity: .5;
+}
+
+
 
 .estado {
     text-align: center;
@@ -269,26 +304,30 @@ header h1 {
 
 <div id="editor" class="editor hidden">
 
-    <h2>✏️ Añadir tarea</h2>
+    <h2>✏️ Añadir contenido</h2>
+
+    <select id="tipoContenido" onchange="cambiarTipoContenido()">
+        <option value="tarea">🎒 Tarea</option>
+        <option value="examen">📝 Examen</option>
+        <option value="apunte">📌 Apunte</option>
+    </select>
 
     <select id="diaSeleccionado">
-
         <option value="lunes">Lunes</option>
         <option value="martes">Martes</option>
         <option value="miercoles">Miércoles</option>
         <option value="jueves">Jueves</option>
         <option value="viernes">Viernes</option>
-
     </select>
 
     <input
         id="textoTarea"
         type="text"
         placeholder="Escribe la tarea"
-        onkeydown="if(event.key === 'Enter') anadirTarea()"
+        onkeydown="if(event.key === 'Enter') anadirContenido()"
     >
 
-    <button onclick="anadirTarea()">
+    <button onclick="anadirContenido()">
         ➕ Añadir
     </button>
 
@@ -348,6 +387,22 @@ header h1 {
 
     </div>
 
+    <div class="extra-card">
+
+        <h2>📝 Exámenes</h2>
+
+        <div id="examenes"></div>
+
+    </div>
+
+    <div class="extra-card">
+
+        <h2>📌 Apuntes</h2>
+
+        <div id="apuntes"></div>
+
+    </div>
+
 </div>
 
 </div>
@@ -362,9 +417,9 @@ header h1 {
    🔐 CÓDIGOS
    ========================================================= */
 
-const CODIGO_VER = "8624";
+const CODIGO_VER = "1234";
 
-const CODIGO_EDITAR = "3482";
+const CODIGO_EDITAR = "9876";
 
 
 /* =========================================================
@@ -392,7 +447,11 @@ let tareas = {
 
     jueves: [],
 
-    viernes: []
+    viernes: [],
+
+    examenes: [],
+
+    apuntes: []
 
 };
 
@@ -446,6 +505,14 @@ async function cargarTareas() {
 
                 viernes: Array.isArray(datos.viernes)
                     ? datos.viernes
+                    : [],
+
+                examenes: Array.isArray(datos.examenes)
+                    ? datos.examenes
+                    : [],
+
+                apuntes: Array.isArray(datos.apuntes)
+                    ? datos.apuntes
                     : []
 
             };
@@ -734,22 +801,97 @@ function mostrarTareas() {
 
     });
 
+
+    mostrarListaExtra(
+        "examenes",
+        tareas.examenes,
+        "No hay exámenes"
+    );
+
+    mostrarListaExtra(
+        "apuntes",
+        tareas.apuntes,
+        "No hay apuntes"
+    );
+
 }
 
+
+function mostrarListaExtra(id, lista, mensaje) {
+
+    const contenedor =
+        document.getElementById(id);
+
+    contenedor.innerHTML = "";
+
+
+    if (!lista || lista.length === 0) {
+
+        contenedor.innerHTML =
+            '<div class="sin-tareas">' +
+            mensaje +
+            '</div>';
+
+        return;
+
+    }
+
+
+    lista.forEach(function(texto, indice) {
+
+        const div =
+            document.createElement("div");
+
+        div.className = "extra-item";
+
+
+        div.innerHTML = `
+
+            <input
+                type="checkbox"
+                onchange="completar(this)"
+            >
+
+            <span>
+                ${escapar(texto)}
+            </span>
+
+            ${
+                modoEdicion
+                ?
+                `
+                <button
+                    class="eliminar"
+                    onclick="eliminarExtra('${id}', ${indice})"
+                >
+                    🗑️
+                </button>
+                `
+                :
+                ""
+            }
+
+        `;
+
+
+        contenedor.appendChild(div);
+
+    });
+
+}
 
 /* =========================================================
    ➕ AÑADIR TAREA
    ========================================================= */
 
-async function anadirTarea() {
+async function anadirContenido() {
 
-    let dia =
+    const tipo =
         document
-        .getElementById("diaSeleccionado")
+        .getElementById("tipoContenido")
         .value;
 
-
-    let texto =
+    const texto =
         document
         .getElementById("textoTarea")
         .value
@@ -758,14 +900,35 @@ async function anadirTarea() {
 
     if (texto === "") {
 
-        alert("Escribe una tarea.");
+        alert("Escribe algo.");
 
         return;
 
     }
 
 
-    tareas[dia].push(texto);
+    if (tipo === "tarea") {
+
+        const dia =
+            document
+            .getElementById("diaSeleccionado")
+            .value;
+
+        tareas[dia].push(texto);
+
+    }
+
+    else if (tipo === "examen") {
+
+        tareas.examenes.push(texto);
+
+    }
+
+    else if (tipo === "apunte") {
+
+        tareas.apuntes.push(texto);
+
+    }
 
 
     document
@@ -775,11 +938,51 @@ async function anadirTarea() {
 
     mostrarTareas();
 
-
     await guardarTareas();
 
 }
 
+
+function cambiarTipoContenido() {
+
+    const tipo =
+        document
+        .getElementById("tipoContenido")
+        .value;
+
+    const selectorDia =
+        document
+        .getElementById("diaSeleccionado");
+
+    const texto =
+        document
+        .getElementById("textoTarea");
+
+
+    if (tipo === "tarea") {
+
+        selectorDia.style.display = "inline-block";
+        texto.placeholder = "Escribe la tarea";
+
+    }
+
+    else if (tipo === "examen") {
+
+        selectorDia.style.display = "none";
+        texto.placeholder =
+            "Ejemplo: Inglés - 15 de octubre";
+
+    }
+
+    else {
+
+        selectorDia.style.display = "none";
+        texto.placeholder =
+            "Escribe el apunte";
+
+    }
+
+}
 
 /* =========================================================
    🗑️ ELIMINAR TAREA
@@ -792,6 +995,23 @@ async function eliminarTarea(dia, indice) {
     ) {
 
         tareas[dia].splice(indice, 1);
+
+        mostrarTareas();
+
+        await guardarTareas();
+
+    }
+
+}
+
+
+async function eliminarExtra(tipo, indice) {
+
+    if (
+        confirm("¿Quieres eliminar este elemento?")
+    ) {
+
+        tareas[tipo].splice(indice, 1);
 
         mostrarTareas();
 
@@ -878,8 +1098,6 @@ function cerrarSesion() {
 document
     .getElementById("codigo")
     .focus();
-
-
 
 
 
